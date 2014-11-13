@@ -38,7 +38,7 @@ public class sha3_512sum
      */
     public static void main(String[] args) throws IOException
     {
-	sha3sum.run("sha3-512sum", args);
+	sha3sum.run("sha3-512sum", args, new byte[2]);
     }
 }
 

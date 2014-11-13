@@ -38,7 +38,7 @@ public class sha3_384sum
      */
     public static void main(String[] args) throws IOException
     {
-	sha3sum.run("sha3-384sum", args);
+	sha3sum.run("sha3-384sum", args, new byte[2]);
     }
 }
 

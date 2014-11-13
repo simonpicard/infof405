@@ -38,7 +38,7 @@ public class sha3sum
      */
     public static void main(String[] args) throws IOException
     {
-	run("sha3sum", args);
+	run("sha3sum", args, new byte[10]);
     }
     
     
@@ -49,7 +49,7 @@ public class sha3sum
      * @param   argv         Command line arguments
      * @throws  IOException  On I/O error (such as broken pipes)
      */
-    public static void run(String cmd, String[] argv) throws IOException
+    public static byte[] run(String cmd, String[] argv, byte[] data) throws IOException
     {
 	if (cmd.indexOf('/') >= 0)
 	    cmd = cmd.substring(cmd.lastIndexOf('/') + 1);
@@ -70,7 +70,7 @@ public class sha3sum
 	Integer J = null; int _j = 1;               /* --squeezes   */
 	int o = 0, s = 0, r = 0, c = 0, w = 0, i = 0, j = 0;
 	
-	boolean binary = false, hex = false;
+	boolean binary = true, hex = false;
 	int multi = 0;
 	
 	String[] files = new String[argv.length + 1];
@@ -294,13 +294,13 @@ public class sha3sum
 	}
 	
 	
-	System.err.println("Bitrate: " + r);
+	/*System.err.println("Bitrate: " + r);
 	System.err.println("Capacity: " + c);
 	System.err.println("Word size: " + w);
 	System.err.println("State size: " + s);
 	System.err.println("Output size: " + o);
 	System.err.println("Iterations: " + i);
-	System.err.println("Squeezes: " + j);
+	System.err.println("Squeezes: " + j);*/
 	
 	
 	if (r > s)
@@ -329,10 +329,12 @@ public class sha3sum
 	    System.err.println(cmd + ": sorry, I will only do at least one squeeze iteration!");
 	    System.exit(3);
 	}
-	
+
 	byte[] stdin = null;
 	boolean fail = false;
 	String filename;
+	
+	ByteArrayInputStream bais = new ByteArrayInputStream(data);
 
 	for (int f = 0; f < fptr; f++)
 	{   String rc = "";
@@ -343,13 +345,14 @@ public class sha3sum
 		byte[] bs;
 		if ((filename != null) || (stdin == null))
 		{
-		    file = new FileInputStream(fn);
+		    //file = new FileInputStream(fn);
 		    SHA3.initialise(r, c, o);
 		    int blksize = 4096; /** XXX os.stat(os.path.realpath(fn)).st_size; **/
 		    byte[] chunk = new byte[blksize];
 		    for (;;)
 		    {
-			int read = file.read(chunk, 0, blksize);
+			int read = bais.read(chunk, 0, blksize);
+			//int read = file.read(chunk, 0, blksize);
 			if (read <= 0)
 			    break;
 			if (hex == false)
@@ -386,14 +389,14 @@ public class sha3sum
 			    bs = SHA3.squeeze();
 		    }
 		    if (binary)
-			System.out.write(bs);
+		    	return bs;
 		    else
 		    {   for (int b = 0, bn = bs.length; b < bn; b++)
 			{   rc += "0123456789ABCDEF".charAt((bs[b] >> 4) & 15);
 			    rc += "0123456789ABCDEF".charAt(bs[b] & 15);
 			}
-			rc += " " + (filename == null ? "-" : filename) + "\n";
-			System.out.print(rc);
+			//rc += " " + (filename == null ? "-" : filename) + "\n";
+			System.out.println(rc);
 		    }
 		}
 		else if (multi == 1)
@@ -469,6 +472,7 @@ public class sha3sum
 	    {   System.err.println(cmd + ": cannot read file: " + filename + ": " + err);
 		fail = true;
 	    }
+	    /*
 	    finally
 	    {   if (file != null)
 		    try
@@ -476,11 +480,15 @@ public class sha3sum
 		    }
 		    catch (final Throwable ignore)
 		    {   //ignore
-	}   }	    }
+		    }
+	    }
+	    */
+	}
 	
-	System.out.flush();
-	if (fail)
-	    System.exit(5);
+	//System.out.flush();
+	/*if (fail)
+	    System.exit(5);*/
+	return new byte[1];
     }
     
 }
