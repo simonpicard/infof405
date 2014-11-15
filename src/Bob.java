@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -20,7 +21,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -47,7 +50,7 @@ public class Bob {
 			publicKey = kp.getPublic();
 			privateKey = kp.getPrivate();
 		
-			connectionSocket = new ServerSocket(2009);
+			connectionSocket = new ServerSocket(1337);
 			
 			//System.out.println("Le serveur est à l'écoute du port "+socketserver.getLocalPort());
 			
@@ -127,11 +130,11 @@ public class Bob {
 		
 		byte[] rawSessionKey = Arrays.copyOfRange(msg, 8, 24);
 		SecretKeySpec sessionKey = new SecretKeySpec(rawSessionKey, "AES");
-		byte[] r = Arrays.copyOfRange(msg, 24, 25);
-		byte[] timestamp = Arrays.copyOfRange(msg, 25,34);
+		byte[] r = Arrays.copyOfRange(msg, 24, 28);
+		byte[] timestamp = Arrays.copyOfRange(msg, 28, 36);
 		
 		if(!(checkTimeStamp(timestamp))){
-			System.out.println("Expired timestamp)");
+			System.out.println("Expired timestamp");
 			return;
 		}
 		
@@ -143,21 +146,21 @@ public class Bob {
 			System.out.println("Bad identifiers");
 			return;
 		}
-		FileOutputStream fos = new FileOutputStream(".\\rcvfile.txt");
+		FileOutputStream fos = new FileOutputStream(".\\rcvfile.jpg");
         BufferedOutputStream bos = new BufferedOutputStream(fos);
         
-		byte[] file = Arrays.copyOfRange(msg, 8, msg.length-10);
+		byte[] file = Arrays.copyOfRange(msg, 8, msg.length-12);
 
-        bos.write(file, 0, msg.length-8-10);
+        bos.write(file, 0, msg.length-8-12);
         bos.flush();
         fos.close();
         bos.close();
 		
-		r = Arrays.copyOfRange(msg, msg.length-10, msg.length-9);
-		timestamp = Arrays.copyOfRange(msg, msg.length-9,msg.length);
+		r = Arrays.copyOfRange(msg, msg.length-12, msg.length-8);
+		timestamp = Arrays.copyOfRange(msg, msg.length-8,msg.length);
 		
 		if(!(checkTimeStamp(timestamp))){
-			System.out.println("Expired timestamp)");
+			System.out.println("Expired timestamp");
 			return;
 		}
 		
@@ -189,8 +192,13 @@ public class Bob {
 	}
 	
 	private boolean checkTimeStamp(byte[] timestamp){
-		//TODO
-		return true;
+		ByteBuffer wrapped = ByteBuffer.wrap(timestamp);
+		long ts = wrapped.getLong();
+		System.out.println(ts);
+		Date d = new Date(ts);
+		Date now = new Date();
+		d.setMinutes(d.getMinutes()+5);
+		return now.before(d);
 	}
 	
 	private boolean checkIdentifiers(byte[] msg) throws UnknownHostException{

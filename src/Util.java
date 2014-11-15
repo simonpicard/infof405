@@ -49,6 +49,12 @@ public class Util {
 		return b;
 	}
 	
+	public static byte[] generateR(){
+		byte[] b = new byte[4];
+		new Random().nextBytes(b);
+		return b;
+	}
+	
 	public static byte[] concatBytes(byte[] a, byte[] b){
 		byte[] c = new byte[a.length + b.length];
 		System.arraycopy(a, 0, c, 0, a.length);

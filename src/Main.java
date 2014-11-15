@@ -12,7 +12,9 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -22,6 +24,16 @@ import javax.crypto.spec.SecretKeySpec;
 public class Main {
 
 	public static void main(String[] args) {
+		
+		//Fenetre mw = new Fenetre();
+		/*int t = (int) (System.currentTimeMillis() / 1000L);
+		System.out.println(t);
+		Date d = new Date((long)t*1000);
+		String DATE_FORMAT_NOW = "yyyy-MM-dd";
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+		String stringDate = sdf.format(d );
+		System.out.println(stringDate);*/
+		
 		/*String teststring = "test1234!!";
 		
 		byte[] test = teststring.getBytes();

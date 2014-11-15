@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -45,7 +46,7 @@ public class Alice {
 			publicKey = kp.getPublic();
 			privateKey = kp.getPrivate();
 		
-			socketClient = new Socket(InetAddress.getLocalHost(),2009);	
+			socketClient = new Socket(InetAddress.getLocalHost(),1337);	
 
 		    in = socketClient.getInputStream();
 		    dis = new DataInputStream(in);
@@ -108,14 +109,17 @@ public class Alice {
 		sendBytes(publicKey.getEncoded());
 		byte[] rawBobPublicKey = readBytes();
 		PublicKey bobPublicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(rawBobPublicKey));
+		long originalTS = System.currentTimeMillis();
 		
 		//step 1
 		byte[] aliceIP = InetAddress.getLocalHost().getAddress();
 		byte[] bobIP = socketClient.getInetAddress().getAddress();
 		byte[] rawSessionKey = Util.generateSK();
 		SecretKeySpec sessionKey = new SecretKeySpec(rawSessionKey, "AES");
-		byte[] r = "r".getBytes();
-		byte[] timestamp = "timestamp".getBytes();
+		byte[] r = Util.generateR();
+		ByteBuffer b = ByteBuffer.allocate(8);
+		b.putLong(originalTS);
+		byte[] timestamp = b.array();
 		byte[] msg = Util.concatBytes(aliceIP, bobIP);
 		msg = Util.concatBytes(msg, rawSessionKey);
 		msg = Util.concatBytes(msg, r);
@@ -125,7 +129,7 @@ public class Alice {
 		sendBytes(encryptedMsg);
 		
 		//step 2
-		File file = new File(".\\testfile.txt");
+		File file = new File(".\\photo.jpg");
 	    long length = file.length();
 	    if (length > Integer.MAX_VALUE) {
 	        System.out.println("File is too large.");
@@ -140,7 +144,7 @@ public class Alice {
 		while ((count = bis.read(bytes)) > 0) {
 			fileByte = Util.concatBytes(fileByte, bytes);
 	    }
-
+		
 		msg = Util.concatBytes(aliceIP, bobIP);
 		msg = Util.concatBytes(msg, fileByte);
 		msg = Util.concatBytes(msg, r);
@@ -164,7 +168,6 @@ public class Alice {
 		sendBytes(signature);
 		
 		//step 4
-	    
 		hash = Util.concatBytes(bobIP, aliceIP);
 		hash = Util.concatBytes(hash, fileByte);
 		hash = Util.concatBytes(hash, r);
