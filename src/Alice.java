@@ -35,18 +35,19 @@ public class Alice {
 	private DataOutputStream dos;
 	private PublicKey publicKey;
 	private PrivateKey privateKey;
+	private String filePath;
 	
-	public Alice(){
+	public Alice(String pub, String priv, String ip, int port, String fp){
 
-		
+		filePath = fp;
 		System.out.println("I am Alice");
 
 		try {
-			KeyPair kp = Util.LoadKeyPair("./alice","RSA");
+			KeyPair kp = Util.LoadKeyPair(pub, priv,"RSA");
 			publicKey = kp.getPublic();
 			privateKey = kp.getPrivate();
 		
-			socketClient = new Socket(InetAddress.getLocalHost(),1337);	
+			socketClient = new Socket(ip, port);	
 
 		    in = socketClient.getInputStream();
 		    dis = new DataInputStream(in);
@@ -114,6 +115,7 @@ public class Alice {
 		//step 1
 		byte[] aliceIP = InetAddress.getLocalHost().getAddress();
 		byte[] bobIP = socketClient.getInetAddress().getAddress();
+		
 		byte[] rawSessionKey = Util.generateSK();
 		SecretKeySpec sessionKey = new SecretKeySpec(rawSessionKey, "AES");
 		byte[] r = Util.generateR();
@@ -129,7 +131,7 @@ public class Alice {
 		sendBytes(encryptedMsg);
 		
 		//step 2
-		File file = new File(".\\photo.jpg");
+		File file = new File(filePath);
 	    long length = file.length();
 	    if (length > Integer.MAX_VALUE) {
 	        System.out.println("File is too large.");

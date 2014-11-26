@@ -40,19 +40,19 @@ public class Bob {
 	private DataOutputStream dos;
 	private PublicKey publicKey;
 	private PrivateKey privateKey;
+	private String filePath;
 	
-	public Bob(){
+	public Bob(String pub, String priv, int port, String fp){
 		
 		System.out.println("I am Bob");
+		filePath = fp;
 		
 		try {
-			KeyPair kp = Util.LoadKeyPair("./alice","RSA");
+			KeyPair kp = Util.LoadKeyPair(pub, priv,"RSA");
 			publicKey = kp.getPublic();
 			privateKey = kp.getPrivate();
 		
-			connectionSocket = new ServerSocket(1337);
-			
-			//System.out.println("Le serveur est à l'écoute du port "+socketserver.getLocalPort());
+			connectionSocket = new ServerSocket(port);
 			
 			socketServer = connectionSocket.accept(); 
 
@@ -146,7 +146,7 @@ public class Bob {
 			System.out.println("Bad identifiers");
 			return;
 		}
-		FileOutputStream fos = new FileOutputStream(".\\rcvfile.jpg");
+		FileOutputStream fos = new FileOutputStream(filePath);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
         
 		byte[] file = Arrays.copyOfRange(msg, 8, msg.length-12);
@@ -194,7 +194,6 @@ public class Bob {
 	private boolean checkTimeStamp(byte[] timestamp){
 		ByteBuffer wrapped = ByteBuffer.wrap(timestamp);
 		long ts = wrapped.getLong();
-		System.out.println(ts);
 		Date d = new Date(ts);
 		Date now = new Date();
 		d.setMinutes(d.getMinutes()+5);

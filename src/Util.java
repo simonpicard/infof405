@@ -13,19 +13,19 @@ import java.util.Random;
 
 
 public class Util {
-	public static KeyPair LoadKeyPair(String path, String algorithm)
+	public static KeyPair LoadKeyPair(String pub, String priv, String algorithm)
 			throws IOException, NoSuchAlgorithmException,
 			InvalidKeySpecException {
 		// Read Public Key.
-		File filePublicKey = new File(path + "_public_key.der");
-		FileInputStream fis = new FileInputStream(path + "_public_key.der");
+		File filePublicKey = new File(pub);
+		FileInputStream fis = new FileInputStream(pub);
 		byte[] encodedPublicKey = new byte[(int) filePublicKey.length()];
 		fis.read(encodedPublicKey);
 		fis.close();
  
 		// Read Private Key.
-		File filePrivateKey = new File(path + "_private_key.der");
-		fis = new FileInputStream(path + "_private_key.der");
+		File filePrivateKey = new File(priv);
+		fis = new FileInputStream(priv);
 		byte[] encodedPrivateKey = new byte[(int) filePrivateKey.length()];
 		fis.read(encodedPrivateKey);
 		fis.close();
