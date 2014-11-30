@@ -100,6 +100,9 @@ There is two possible action send or receive a file. The receiver is the server 
 	\begin{minipage}{0.9\textwidth}
 	\textbf{ID : } 1\\ 
 	\textbf{Description : } Firewall must be set up with open port for the socket in java.\\
+	\newline
+	\textbf{ID : } 2\\ 
+	\textbf{Description : } The sender and the receiver must provide a private key to the program, they should not share this key.\\
 	\end{minipage}
 }
 \subsection{Internal security notes}
@@ -163,8 +166,8 @@ There is two possible action send or receive a file. The receiver is the server 
 	\textbf{Level of trust : } (5) User\\
 	\newline
 	\textbf{ID : } 5\\ 
-	\textbf{Name : } BobPublicKey\\
-	\textbf{Description : } The public key of Bob is used for the encryption. A code injection can come through that + buffer overflow.\\
+	\textbf{Name : } Keys\\
+	\textbf{Description : } The keys are used for the encryption. A code injection can come through that + buffer overflow.\\
 	\textbf{Level of trust : } (1) Application\\
 	\end{minipage}
 }
