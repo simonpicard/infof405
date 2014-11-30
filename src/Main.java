@@ -29,14 +29,22 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		//System.out.println(InetAddress.getLocalHost().getHostAddress());
-        
-		if (args.length == 0){
-			Bob bob = new Bob("./bob_public_key.der", "./bob_private_key.der", 1337, ".\\rcvfile.txt");
+        /*
+		
+		if (args.length == 1){
+			Bob bob = new Bob("./bob_public_certificate.der", "./bob_private_key.der", 1337, ".\\rcvfile.txt");
 		}
 		else{
-			Alice alice = new Alice("./alice_public_key.der", "./alice_private_key.der", "172.23.218.63", 1337, ".\\test.txt");
-		}
+			try {
+				Alice alice = new Alice("./alice_public_certificate.der", "./alice_private_key.der", InetAddress.getLocalHost().getHostAddress(), 1338, ".\\test.txt");
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}*/
+
+		MainFrame mainFrame = new MainFrame();
+		mainFrame.setVisible(true);
 	}
 
 }

@@ -1,10 +1,12 @@
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -13,7 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 
 
 public class RSA {
-	public static byte[] encrypt(byte[] data, PublicKey pubKey) {
+	public static byte[] encrypt(byte[] data, Key pubKey) {
 		byte[] cipherData = null;
 		try {
 			Cipher cipher = Cipher.getInstance("RSA");
@@ -39,7 +41,7 @@ public class RSA {
 	}
 	
 
-	public static byte[] decrypt(byte[] data, PrivateKey privKey) {
+	public static byte[] decrypt(byte[] data, Key privKey) {
 		byte[] cipherData = null;
 	    try {
 			Cipher cipher = Cipher.getInstance("RSA");
@@ -65,6 +67,9 @@ public class RSA {
 	}
 	
 	public static byte[] generateSignature(byte[] data, PrivateKey privKey) {
+	    byte[] hash = SHA3.hash(data);
+	    return RSA.encrypt(hash, privKey);
+	    /*
 	    Signature signature;
 	    byte[] sigBytes = null;
 		try {
@@ -74,6 +79,8 @@ public class RSA {
 		    signature.update(data);
 
 		    sigBytes = signature.sign();
+		    
+		    
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,10 +91,12 @@ public class RSA {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    return sigBytes;
+	    return sigBytes;*/
 	}
 	
 	public static boolean verifySignature(byte[] data, PublicKey pubKey, byte[] msg) {
+	    byte[] hash = SHA3.hash(msg);
+	    return Arrays.equals(RSA.decrypt(data, pubKey),hash);/*
 	    Signature signature;
 	    boolean res = false;
 		try {
@@ -106,6 +115,6 @@ public class RSA {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return res;
+		return res;*/
 	}
 }

@@ -1,7 +1,11 @@
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +23,9 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
@@ -41,11 +48,16 @@ public class Bob {
 	private PublicKey publicKey;
 	private PrivateKey privateKey;
 	private String filePath;
+	private String pubPath;
+	private MainFrame bobFrame;
 	
-	public Bob(String pub, String priv, int port, String fp){
+	public Bob(String pub, String priv, int port, String fp, MainFrame frame){
+		
 		
 		System.out.println("I am Bob");
 		filePath = fp;
+		pubPath = pub;
+		bobFrame = frame;
 		
 		try {
 			KeyPair kp = Util.LoadKeyPair(pub, priv,"RSA");
@@ -73,6 +85,9 @@ public class Bob {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CertificateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -110,11 +125,20 @@ public class Bob {
 	    return data;
 	}
 	
-	private void protocol() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException{
+	private void protocol() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, CertificateException{
 		//step 0 public key
 		byte[] rawAlicePublicKey = readBytes();
-		PublicKey alicePublicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(rawAlicePublicKey));
-		sendBytes(publicKey.getEncoded());
+		CertificateFactory cf = CertificateFactory.getInstance("X.509");
+		X509Certificate aliceCertificate = (X509Certificate)cf.generateCertificate(new ByteArrayInputStream(rawAlicePublicKey));
+		PublicKey alicePublicKey = aliceCertificate.getPublicKey();
+		
+		FileInputStream fis = new FileInputStream(pubPath);
+	    X509Certificate cert = (X509Certificate) cf.generateCertificate(fis);
+	    fis.close();
+		
+		
+		sendBytes(cert.getEncoded());
+		System.out.println("step 0");
 		
 		//step 1
 		byte[] bobIP = InetAddress.getLocalHost().getAddress();
@@ -137,6 +161,7 @@ public class Bob {
 			System.out.println("Expired timestamp");
 			return;
 		}
+		System.out.println("step 1");
 		
 		//step2
 		cryptedMsg = readBytes();
@@ -163,17 +188,17 @@ public class Bob {
 			System.out.println("Expired timestamp");
 			return;
 		}
+		System.out.println("step 2");
 		
 		//step 3
-		byte[] hash = Util.concatBytes(aliceIP, bobIP);
-		hash = Util.concatBytes(hash, cryptedMsg);
-		hash = Util.concatBytes(hash, r);
-		hash = Util.concatBytes(hash, timestamp);
-		hash = SHA3.hash(hash);
+		msg = Util.concatBytes(aliceIP, bobIP);
+		msg = Util.concatBytes(msg, cryptedMsg);
+		msg = Util.concatBytes(msg, r);
+		msg = Util.concatBytes(msg, timestamp);
 		
 		cryptedMsg = readBytes();
 		
-		if (RSA.verifySignature(cryptedMsg, alicePublicKey, hash)){
+		if (RSA.verifySignature(cryptedMsg, alicePublicKey, msg)){
 			System.out.println("Signature ok");
 		}
 		else{
@@ -182,13 +207,14 @@ public class Bob {
 		}
 		
 		//step 4
-		hash = Util.concatBytes(bobIP, aliceIP);
+		byte[] hash = Util.concatBytes(bobIP, aliceIP);
 		hash = Util.concatBytes(hash, file);
 		hash = Util.concatBytes(hash, r);
 		hash = Util.concatBytes(hash, timestamp);
 		hash = SHA3.hash(hash);
 		
 		sendBytes(hash);
+		System.out.println("step 3");
 	}
 	
 	private boolean checkTimeStamp(byte[] timestamp){
@@ -204,6 +230,10 @@ public class Bob {
 		
 		byte[] rAliceIP = Arrays.copyOfRange(msg, 0, 4);
 		byte[] rBobIP = Arrays.copyOfRange(msg, 4, 8);
+		InetAddress aliceIA = InetAddress.getByAddress(rAliceIP);
+		InetAddress bobIA = InetAddress.getByAddress(rBobIP);
+		System.out.println(aliceIA.getHostAddress());
+		System.out.println(bobIA.getHostAddress());
 
 		return (Arrays.equals(rAliceIP, socketServer.getInetAddress().getAddress()) && Arrays.equals(rBobIP, InetAddress.getLocalHost().getAddress()));
 	}

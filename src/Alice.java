@@ -1,5 +1,6 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -19,6 +20,10 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
@@ -36,10 +41,14 @@ public class Alice {
 	private PublicKey publicKey;
 	private PrivateKey privateKey;
 	private String filePath;
+	private String pubPath;
+	private MainFrame aliceFrame;
 	
-	public Alice(String pub, String priv, String ip, int port, String fp){
+	public Alice(String pub, String priv, String ip, int port, String fp, MainFrame frame){
 
 		filePath = fp;
+		pubPath = pub;
+		aliceFrame = frame;
 		System.out.println("I am Alice");
 
 		try {
@@ -66,6 +75,9 @@ public class Alice {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CertificateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -105,12 +117,23 @@ public class Alice {
 	}
 	
 	
-	private void protocol() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException{
+	private void protocol() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, CertificateException{
 		//step 0 : public key
-		sendBytes(publicKey.getEncoded());
+
+		CertificateFactory cf = CertificateFactory.getInstance("X.509");
+		
+		FileInputStream fis = new FileInputStream(pubPath);
+	    X509Certificate cert = (X509Certificate) cf.generateCertificate(fis);
+	    fis.close();
+		
+		sendBytes(cert.getEncoded());
 		byte[] rawBobPublicKey = readBytes();
-		PublicKey bobPublicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(rawBobPublicKey));
+
+		X509Certificate bobCertificate = (X509Certificate)cf.generateCertificate(new ByteArrayInputStream(rawBobPublicKey));
+		PublicKey bobPublicKey = bobCertificate.getPublicKey();
+
 		long originalTS = System.currentTimeMillis();
+		System.out.println("step 0");
 		
 		//step 1
 		byte[] aliceIP = InetAddress.getLocalHost().getAddress();
@@ -129,6 +152,7 @@ public class Alice {
 		byte[] encryptedMsg = RSA.encrypt(msg, bobPublicKey);
 		
 		sendBytes(encryptedMsg);
+		System.out.println("step 1");
 		
 		//step 2
 		File file = new File(filePath);
@@ -138,7 +162,7 @@ public class Alice {
 	        return;
 	    }
 	    byte[] bytes = new byte[(int) length];
-	    FileInputStream fis = new FileInputStream(file);
+	    fis = new FileInputStream(file);
 	    BufferedInputStream bis = new BufferedInputStream(fis);
 	    int count = bis.read(bytes);
 	    byte[] fileByte = bytes;
@@ -159,24 +183,25 @@ public class Alice {
 		bis.close();
 		
 		//step 3
-		byte[] hash = Util.concatBytes(aliceIP, bobIP);
-		hash = Util.concatBytes(hash, encryptedMsg);
-		hash = Util.concatBytes(hash, r);
-		hash = Util.concatBytes(hash, timestamp);
-		hash = SHA3.hash(hash);
+		msg = Util.concatBytes(aliceIP, bobIP);
+		msg = Util.concatBytes(msg, encryptedMsg);
+		msg = Util.concatBytes(msg, r);
+		msg = Util.concatBytes(msg, timestamp);
 		
-		byte[] signature = RSA.generateSignature(hash, privateKey);
+		byte[] signature = RSA.generateSignature(msg, privateKey);
 		
 		sendBytes(signature);
+		System.out.println("step 3");
 		
 		//step 4
-		hash = Util.concatBytes(bobIP, aliceIP);
+		byte[] hash = Util.concatBytes(bobIP, aliceIP);
 		hash = Util.concatBytes(hash, fileByte);
 		hash = Util.concatBytes(hash, r);
 		hash = Util.concatBytes(hash, timestamp);
 		hash = SHA3.hash(hash);
 		
 		msg = readBytes();
+		System.out.println("step 4");
 		
 		if (Arrays.equals(msg,  hash)){
 			System.out.println("File succesfully transmitted");
