@@ -1,12 +1,11 @@
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Font;
-
 import java.awt.Rectangle;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.InetAddress;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -82,13 +81,13 @@ public class AliceDialog extends JDialog {
     	
     	//
         jlblServerName.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 12));
-        jlblServerName.setText("Bob's IP");
+        jlblServerName.setText("Send to IP");
         jlblServerName.setBounds(new Rectangle(32, 22, 73, 26));
         this.getContentPane().setLayout(null);
         
         jtfServerName.setBackground(Color.white);
         jtfServerName.setBorder(BorderFactory.createEtchedBorder());
-        jtfServerName.setText("");
+        jtfServerName.setText(InetAddress.getLocalHost().getHostAddress());
         jtfServerName.setBounds(new Rectangle(127, 25, 220, 21));
         
         
@@ -100,7 +99,7 @@ public class AliceDialog extends JDialog {
         
         jtfPort.setBackground(Color.white);
         jtfPort.setBorder(BorderFactory.createEtchedBorder());
-        jtfPort.setText("1377");
+        jtfPort.setText("1337");
         jtfPort.setBounds(new Rectangle(129, 72, 62, 21));
         
         //
@@ -122,12 +121,12 @@ public class AliceDialog extends JDialog {
 
         //
         jlblFilePub.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 12));
-        jlblFilePub.setText("Public key");
-        jlblFilePub.setBounds(new Rectangle(32, 165, 34, 16));
+        jlblFilePub.setText("Public certificate");
+        jlblFilePub.setBounds(new Rectangle(32, 165, 100, 16));
         
         jtfFilePub.setBackground(Color.white);
         jtfFilePub.setBorder(BorderFactory.createEtchedBorder());
-        jtfFilePub.setText("");
+        jtfFilePub.setText("./sender_public_certificate.der");
         jtfFilePub.setBounds(new Rectangle(127, 163, 164, 21));
 
         jbtnFilePub.setBackground(new Color(236, 247, 255));
@@ -140,11 +139,11 @@ public class AliceDialog extends JDialog {
         //
         jlblFilePrive.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 12));
         jlblFilePrive.setText("Private key");
-        jlblFilePrive.setBounds(new Rectangle(32, 210, 34, 16));
+        jlblFilePrive.setBounds(new Rectangle(32, 210, 100, 16));
         
         jtfFilePrive.setBackground(Color.white);
         jtfFilePrive.setBorder(BorderFactory.createEtchedBorder());
-        jtfFilePrive.setText("");
+        jtfFilePrive.setText("./sender_private_key.der");
         jtfFilePrive.setBounds(new Rectangle(127, 208, 164, 21));
 
         jbtnFilePrive.setBackground(new Color(236, 247, 255));
@@ -211,7 +210,7 @@ public class AliceDialog extends JDialog {
 
     public void jbtnFile_actionPerformed(ActionEvent e) {
         JFileChooser jfc=new JFileChooser();
-        jfc.setMultiSelectionEnabled(true);
+        jfc.setCurrentDirectory(new File("."));
         String fileName="";
         
         jfc.showOpenDialog(this);
@@ -226,7 +225,7 @@ public class AliceDialog extends JDialog {
     
     public void jbtnFilePub_actionPerformed(ActionEvent e) {
         JFileChooser jfc=new JFileChooser();
-        jfc.setMultiSelectionEnabled(true);
+        jfc.setCurrentDirectory(new File("."));
         String fileName="";
         
         jfc.showOpenDialog(this);
@@ -242,7 +241,7 @@ public class AliceDialog extends JDialog {
     
     public void jbtnFilePrive_actionPerformed(ActionEvent e) {
         JFileChooser jfc=new JFileChooser();
-        jfc.setMultiSelectionEnabled(true);
+        jfc.setCurrentDirectory(new File("."));
         String fileName="";
         
         jfc.showOpenDialog(this);

@@ -81,17 +81,17 @@ public class BobDialog extends JDialog {
         
         jtfPort.setBackground(Color.white);
         jtfPort.setBorder(BorderFactory.createEtchedBorder());
-        jtfPort.setText("1377");
+        jtfPort.setText("1337");
         jtfPort.setBounds(new Rectangle(129, 72, 62, 21));
         
         //
         jlblFile.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 12));
-        jlblFile.setText("File");
-        jlblFile.setBounds(new Rectangle(32, 120, 34, 16));
+        jlblFile.setText("File to save");
+        jlblFile.setBounds(new Rectangle(32, 120, 100, 16));
         
         jtfFile.setBackground(Color.white);
         jtfFile.setBorder(BorderFactory.createEtchedBorder());
-        jtfFile.setText("");
+        jtfFile.setText("./rcvfile.txt");
         jtfFile.setBounds(new Rectangle(127, 118, 164, 21));
 
         jbtnFile.setBackground(new Color(236, 247, 255));
@@ -103,12 +103,12 @@ public class BobDialog extends JDialog {
 
         //
         jlblFilePub.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 12));
-        jlblFilePub.setText("Public key");
-        jlblFilePub.setBounds(new Rectangle(32, 165, 34, 16));
+        jlblFilePub.setText("Public certificate");
+        jlblFilePub.setBounds(new Rectangle(32, 165, 100, 16));
         
         jtfFilePub.setBackground(Color.white);
         jtfFilePub.setBorder(BorderFactory.createEtchedBorder());
-        jtfFilePub.setText("");
+        jtfFilePub.setText("./receiver_public_certificate.der");
         jtfFilePub.setBounds(new Rectangle(127, 163, 164, 21));
 
         jbtnFilePub.setBackground(new Color(236, 247, 255));
@@ -121,11 +121,11 @@ public class BobDialog extends JDialog {
         //
         jlblFilePrive.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 12));
         jlblFilePrive.setText("Private key");
-        jlblFilePrive.setBounds(new Rectangle(32, 210, 34, 16));
+        jlblFilePrive.setBounds(new Rectangle(32, 210, 100, 16));
         
         jtfFilePrive.setBackground(Color.white);
         jtfFilePrive.setBorder(BorderFactory.createEtchedBorder());
-        jtfFilePrive.setText("");
+        jtfFilePrive.setText("./receiver_private_key.der");
         jtfFilePrive.setBounds(new Rectangle(127, 208, 164, 21));
 
         jbtnFilePrive.setBackground(new Color(236, 247, 255));
@@ -189,6 +189,7 @@ public class BobDialog extends JDialog {
   
  public void jbtnFile_actionPerformed(ActionEvent e) {
      JFileChooser jfc = new JFileChooser();
+     jfc.setCurrentDirectory(new File("."));
      File aFile;
      String fileName;
      jfc.showSaveDialog(this);
@@ -202,7 +203,7 @@ public class BobDialog extends JDialog {
   
   public void jbtnFilePub_actionPerformed(ActionEvent e) {
       JFileChooser jfc=new JFileChooser();
-      jfc.setMultiSelectionEnabled(true);
+      jfc.setCurrentDirectory(new File("."));
       String fileName="";
       
       jfc.showOpenDialog(this);
@@ -219,7 +220,7 @@ public class BobDialog extends JDialog {
   public void jbtnFilePrive_actionPerformed(ActionEvent e) {
 
       JFileChooser jfc=new JFileChooser();
-      jfc.setMultiSelectionEnabled(true);
+      jfc.setCurrentDirectory(new File("."));
       String fileName="";
       
       jfc.showOpenDialog(this);

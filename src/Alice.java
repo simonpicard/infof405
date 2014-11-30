@@ -49,7 +49,6 @@ public class Alice {
 		filePath = fp;
 		pubPath = pub;
 		aliceFrame = frame;
-		System.out.println("I am Alice");
 
 		try {
 			KeyPair kp = Util.LoadKeyPair(pub, priv,"RSA");
@@ -127,13 +126,14 @@ public class Alice {
 	    fis.close();
 		
 		sendBytes(cert.getEncoded());
+		aliceFrame.jlog.setText("Public key sent");
 		byte[] rawBobPublicKey = readBytes();
+		aliceFrame.jlog.setText(aliceFrame.jlog.getText()+"\n"+"Public key received");
 
 		X509Certificate bobCertificate = (X509Certificate)cf.generateCertificate(new ByteArrayInputStream(rawBobPublicKey));
 		PublicKey bobPublicKey = bobCertificate.getPublicKey();
 
 		long originalTS = System.currentTimeMillis();
-		System.out.println("step 0");
 		
 		//step 1
 		byte[] aliceIP = InetAddress.getLocalHost().getAddress();
@@ -152,13 +152,13 @@ public class Alice {
 		byte[] encryptedMsg = RSA.encrypt(msg, bobPublicKey);
 		
 		sendBytes(encryptedMsg);
-		System.out.println("step 1");
+		aliceFrame.jlog.setText(aliceFrame.jlog.getText()+"\n"+"Session key sent");
 		
 		//step 2
 		File file = new File(filePath);
 	    long length = file.length();
 	    if (length > Integer.MAX_VALUE) {
-	        System.out.println("File is too large.");
+			aliceFrame.jlog.setText(aliceFrame.jlog.getText()+"\n"+"File is to large");
 	        return;
 	    }
 	    byte[] bytes = new byte[(int) length];
@@ -178,6 +178,7 @@ public class Alice {
 		encryptedMsg = AES.encrypt(msg, sessionKey);
 		
 		sendBytes(encryptedMsg);
+		aliceFrame.jlog.setText(aliceFrame.jlog.getText()+"\n"+"File sent");
 		
 		fis.close();
 		bis.close();
@@ -191,7 +192,7 @@ public class Alice {
 		byte[] signature = RSA.generateSignature(msg, privateKey);
 		
 		sendBytes(signature);
-		System.out.println("step 3");
+		aliceFrame.jlog.setText(aliceFrame.jlog.getText()+"\n"+"Signature sent");
 		
 		//step 4
 		byte[] hash = Util.concatBytes(bobIP, aliceIP);
@@ -201,13 +202,12 @@ public class Alice {
 		hash = SHA3.hash(hash);
 		
 		msg = readBytes();
-		System.out.println("step 4");
 		
 		if (Arrays.equals(msg,  hash)){
-			System.out.println("File succesfully transmitted");
+			aliceFrame.jlog.setText(aliceFrame.jlog.getText()+"\n"+"File succesfully transmitted");
 		}
 		else{
-			System.out.println("File transmitted is corrupt");
+			aliceFrame.jlog.setText(aliceFrame.jlog.getText()+"\n"+"File transmitted is corrupt");
 		}
 		
 	}

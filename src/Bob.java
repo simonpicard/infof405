@@ -54,7 +54,6 @@ public class Bob {
 	public Bob(String pub, String priv, int port, String fp, MainFrame frame){
 		
 		
-		System.out.println("I am Bob");
 		filePath = fp;
 		pubPath = pub;
 		bobFrame = frame;
@@ -131,14 +130,14 @@ public class Bob {
 		CertificateFactory cf = CertificateFactory.getInstance("X.509");
 		X509Certificate aliceCertificate = (X509Certificate)cf.generateCertificate(new ByteArrayInputStream(rawAlicePublicKey));
 		PublicKey alicePublicKey = aliceCertificate.getPublicKey();
-		
+		bobFrame.jlog.setText("Sender's public key received");
 		FileInputStream fis = new FileInputStream(pubPath);
 	    X509Certificate cert = (X509Certificate) cf.generateCertificate(fis);
 	    fis.close();
 		
 		
 		sendBytes(cert.getEncoded());
-		System.out.println("step 0");
+		bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Public key sent");
 		
 		//step 1
 		byte[] bobIP = InetAddress.getLocalHost().getAddress();
@@ -148,7 +147,7 @@ public class Bob {
 		byte[] msg = RSA.decrypt(cryptedMsg, privateKey);
 		
 		if (!checkIdentifiers(Arrays.copyOfRange(msg, 0, 8))){
-			System.out.println("Bad identifiers");
+			bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Bad identifiers");
 			return;
 		}
 		
@@ -158,17 +157,17 @@ public class Bob {
 		byte[] timestamp = Arrays.copyOfRange(msg, 28, 36);
 		
 		if(!(checkTimeStamp(timestamp))){
-			System.out.println("Expired timestamp");
+			bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Expired timestamp");
 			return;
 		}
-		System.out.println("step 1");
+		bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Session key received");
 		
 		//step2
 		cryptedMsg = readBytes();
 		msg = AES.decrypt(cryptedMsg, sessionKey);
 		
 		if (!checkIdentifiers(Arrays.copyOfRange(msg, 0, 8))){
-			System.out.println("Bad identifiers");
+			bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Bad identifiers");
 			return;
 		}
 		FileOutputStream fos = new FileOutputStream(filePath);
@@ -185,10 +184,10 @@ public class Bob {
 		timestamp = Arrays.copyOfRange(msg, msg.length-8,msg.length);
 		
 		if(!(checkTimeStamp(timestamp))){
-			System.out.println("Expired timestamp");
+			bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Expired timestamp");
 			return;
 		}
-		System.out.println("step 2");
+		bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"File received");
 		
 		//step 3
 		msg = Util.concatBytes(aliceIP, bobIP);
@@ -199,10 +198,10 @@ public class Bob {
 		cryptedMsg = readBytes();
 		
 		if (RSA.verifySignature(cryptedMsg, alicePublicKey, msg)){
-			System.out.println("Signature ok");
+			bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Signature ok");
 		}
 		else{
-			System.out.println("Bad signature");
+			bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Bad signature");
 			return;
 		}
 		
@@ -214,7 +213,7 @@ public class Bob {
 		hash = SHA3.hash(hash);
 		
 		sendBytes(hash);
-		System.out.println("step 3");
+		bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Ack sent");
 	}
 	
 	private boolean checkTimeStamp(byte[] timestamp){

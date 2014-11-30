@@ -69,15 +69,15 @@ public class MainFrame extends JFrame {
         jbtnSend.setBounds(new Rectangle(14, 14, 85, 25));
         jbtnSend.setFont(new java.awt.Font("ËÎÌå", Font.PLAIN, 13));
         jbtnSend.setBorder(BorderFactory.createRaisedBevelBorder());
-        jbtnSend.setText("Alice");
+        jbtnSend.setText("Send");
         jbtnSend.addActionListener(new MainFrame_jbtnSend_actionAdapter(this));
         
         
-        jlblIP.setText("My IP£º");
+        jlblIP.setText("My IP ");
         jlblIP.setFont(new java.awt.Font("ËÎÌå", Font.PLAIN, 13));
         jlblIP.setBounds(new Rectangle(197, 18, 180, 16));
         byte [] ip=InetAddress.getLocalHost().getAddress();
-        jlblIP.setText("My IP£º"+(ip[0]&0xff)+"."+(ip[1]&0xff)+"."+(ip[2]&0xff)+"."+(ip[3]&0xff));
+        jlblIP.setText("My IP "+(ip[0]&0xff)+"."+(ip[1]&0xff)+"."+(ip[2]&0xff)+"."+(ip[3]&0xff));
         
         
         
@@ -85,14 +85,14 @@ public class MainFrame extends JFrame {
         jbtnSetting.setBounds(new Rectangle(106, 14, 73, 25));
         jbtnSetting.setFont(new java.awt.Font("ËÎÌå", Font.PLAIN, 13));
         jbtnSetting.setBorder(BorderFactory.createRaisedBevelBorder());
-        jbtnSetting.setText("Bob");
+        jbtnSetting.setText("Receive");
         jbtnSetting.addActionListener(new MainFrame_jbtnSetting_actionAdapter(this));
         
         jlog.setBackground(new Color(206, 227, 249));
         jlog.setDisabledTextColor(Color.orange);
         jlog.setText("log : ");
         jlog.setWrapStyleWord(true);
-        jlog.setBounds(new Rectangle(20, 50, 345, 55));
+        jlog.setBounds(new Rectangle(20, 50, 345, 355));
         
         
 
