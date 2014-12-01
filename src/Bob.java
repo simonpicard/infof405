@@ -154,9 +154,9 @@ public class Bob {
 		byte[] rawSessionKey = Arrays.copyOfRange(msg, 8, 24);
 		SecretKeySpec sessionKey = new SecretKeySpec(rawSessionKey, "AES");
 		byte[] r = Arrays.copyOfRange(msg, 24, 28);
-		byte[] timestamp = Arrays.copyOfRange(msg, 28, 36);
+		byte[] originalTimestamp = Arrays.copyOfRange(msg, 28, 36);
 		
-		if(!(checkTimeStamp(timestamp))){
+		if(!(checkTimeStamp(originalTimestamp))){
 			bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Expired timestamp");
 			return;
 		}
@@ -181,9 +181,9 @@ public class Bob {
         bos.close();
 		
 		r = Arrays.copyOfRange(msg, msg.length-12, msg.length-8);
-		timestamp = Arrays.copyOfRange(msg, msg.length-8,msg.length);
+		byte[] timestamp = Arrays.copyOfRange(msg, msg.length-8,msg.length);
 		
-		if(!(checkTimeStamp(timestamp))){
+		if(!(checkTimeStamp(timestamp, originalTimestamp))){
 			bobFrame.jlog.setText(bobFrame.jlog.getText()+"\n"+"Expired timestamp");
 			return;
 		}
@@ -223,6 +223,15 @@ public class Bob {
 		Date now = new Date();
 		d.setMinutes(d.getMinutes()+5);
 		return now.before(d);
+	}
+	
+	private boolean checkTimeStamp(byte[] timestamp, byte[] ots){
+		ByteBuffer wrapped = ByteBuffer.wrap(timestamp);
+		long ts = wrapped.getLong();
+		Date d = new Date(ts);
+		Date now = new Date();
+		d.setMinutes(d.getMinutes()+5);
+		return now.before(d) && Arrays.equals(ots, timestamp);
 	}
 	
 	private boolean checkIdentifiers(byte[] msg) throws UnknownHostException{
