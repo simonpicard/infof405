@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[a4paper,12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
 \usepackage[english]{babel}
@@ -64,150 +64,160 @@ There is two possible action send or receive a file. The receiver is the server 
 
 
 \subsection{External dependencies}
-
 \fbox{
-	\begin{minipage}{0.9\textwidth}
-	\textbf{ID : } 1\\ 
-	\textbf{Description : } The software runs on two computers. Because the code is in Java, it can be easily ported on smartphones or tablet.\\
-	\newline
-	\textbf{ID : } 2\\ 
-	\textbf{Description : } Both computers are connected to each other. The system works with cable connection or wifi.\\
-	\newline
-	\textbf{ID : } 3\\ 
-	\textbf{Description : } There is a firewall on each computer.\\
-	\newline
-	\textbf{ID : } 4\\ 
-	\textbf{Description : } The OS on the computers can be any OS.\\
-	\end{minipage}
+\begin{minipage}{0.9\textwidth}
+\textbf{ID : } 1\\
+\textbf{Description : }The software runs on two computers. Because the code is in Java, it can be easily ported on smartphone or tablet.\\
+\newline
+\textbf{ID : } 2\\
+\textbf{Description : }Both computers are connected to each other. The system works with cable connection or wifi.\\
+\newline
+\textbf{ID : } 3\\
+\textbf{Description : }There is a firewall on each computer.	\\
+\newline
+\textbf{ID : } 4\\
+\textbf{Description : }The OS on the computers can be any OS because it is Java.\\
+\end{minipage}
 }
 \subsection{Implementation assumptions}
-
 \fbox{
-	\begin{minipage}{0.9\textwidth}
-	\textbf{ID : } 1\\ 
-	\textbf{Description : } The random numbers are considered as random even if they're not perfectly random.\\
-	\newline
-	\textbf{ID : } 2\\ 
-	\textbf{Description : } The implementations of hashing and encryption algorithms must be secure and they must never leak sensitive data through buffer overflows, data in shared memory, etc.\\
-	\newline
-	\textbf{ID : } 3\\ 
-	\textbf{Description : } Java handle de sockets gestion therefor their implementation must be secure.\\
-	\end{minipage}
+\begin{minipage}{0.9\textwidth}
+\textbf{ID : } 1\\
+\textbf{Description : }The random numbers are considered as random even if they're not perfectly random.\\
+\newline
+\textbf{ID : } 2\\
+\textbf{Description : }The implementations of hashing and encryption algorithms must be secure and they must never leak sensitive data through buffer overflows, data in shared memory, etc.\\
+\newline
+\textbf{ID : } 3\\
+\textbf{Description : }Java handle de sockets gestion therefor their implementation must be secure.\\
+\end{minipage}
 }
 \subsection{External security notes}
-
 \fbox{
-	\begin{minipage}{0.9\textwidth}
-	\textbf{ID : } 1\\ 
-	\textbf{Description : } Firewall must be set up with open port for the socket in java.\\
-	\newline
-	\textbf{ID : } 2\\ 
-	\textbf{Description : } The sender and the receiver must provide a private key to the program, they should not share this key.\\
-	\end{minipage}
+\begin{minipage}{0.9\textwidth}
+\textbf{ID : } 1\\
+\textbf{Description : }Firewall must be set up with open port for the socket in java.\\
+\newline
+\textbf{ID : } 2\\
+\textbf{Description : }The user should not give a bad IP for the receiver.\\
+\end{minipage}
 }
 \subsection{Internal security notes}
-
 \fbox{
-	\begin{minipage}{0.9\textwidth}
-	\textbf{ID : } 1\\ 
-	\textbf{Description : } OpenSSL is used to generate RSA key pairs. Thus we rely on OpenSSL not leaking sensitive data (e.g. it must not make keys accessible through some system hack), and OpenSSL must generate correct and secure RSA certificates.\\
-	\newline
-	\textbf{ID : } 2\\ 
-	\textbf{Description : } The server and client programs are implemented in Java, using libraries that provide AES and RSA implementations\\
-	\end{minipage}
+\begin{minipage}{0.9\textwidth}
+\textbf{ID : } 1\\
+\textbf{Description : }OpenSSL is used to generate RSA key pairs. Thus we rely on OpenSSL not leaking sensitive data (e.g. it must not make keys accessible through some system hack), and OpenSSL must generate correct and secure RSA certificates.\\
+\newline
+\textbf{ID : } 2\\
+\textbf{Description : }The sender and receiver programs are implemented in Java, using libraries that provide AES and RSA implementations.\\
+\end{minipage}
 }
 \subsection{Levels of trust}
-
 \fbox{
-	\begin{minipage}{0.9\textwidth}
-	\textbf{ID : } 1\\ 
-	\textbf{Name : } Application\\
-	\textbf{Description : } The application itself communicate to the same application on the second computer.\\
-	\newline
-	\textbf{ID : } 2\\ 
-	\textbf{Name : } Internet\\
-	\textbf{Description : } Online application and connection to the computer. No permission on the application.\\
-	\newline
-	\textbf{ID : } 3\\ 
-	\textbf{Name : } Local Network\\
-	\textbf{Description : } User or application on the local Network. No permission on the application.\\
-	\newline
-	\textbf{ID : } 4\\ 
-	\textbf{Name : } Bluetooth User\\
-	\textbf{Description : } User or application using bluetooth near the computer of the sender or the receiver. No permission on the application.\\
-	\newline
-	\textbf{ID : } 5\\ 
-	\textbf{Name : } User\\
-	\textbf{Description : } The User of the application (sender or receiver).\\
-	\end{minipage}
+\begin{minipage}{0.9\textwidth}
+\textbf{ID : } 1\\
+\textbf{Name : Sender}\\
+\textbf{Description : }The user can input the IP of the receiver, the port for the connection and the file to send. He will be notified if the file has been sent or not.\\
+\newline
+\textbf{ID : } 2\\
+\textbf{Name : Receiver}\\
+\textbf{Description : }The receiver received the file and can precise the port used.\\
+\end{minipage}
 }
 \subsection{Entry points}
-
 \fbox{
-	\begin{minipage}{0.9\textwidth}
-	\textbf{ID : } 1\\ 
-	\textbf{Name : } Ethernet port\\
-	\textbf{Description : } Both computers are connected via a ethernet cable to each other.\\
-	\textbf{Level of trust : } (1) Application\\
-	\newline
-	\textbf{ID : } 2\\ 
-	\textbf{Name : } Wifi\\
-	\textbf{Description : } Both computers are connected via wifi to each other.\\
-	\textbf{Level of trust : } (1) Application, (2) Internet, (3) Local Network\\
-	\newline
-	\textbf{ID : } 3\\ 
-	\textbf{Name : } Bluetooth\\
-	\textbf{Description : } Both computers are connected via bluetooth to each other.\\
-	\textbf{Level of trust : } (1) Application, (4) Bluetooth User\\
-	\newline
-	\textbf{ID : } 4\\ 
-	\textbf{Name : } File\\
-	\textbf{Description : } The application is used to exchange files. At a given moment, the user must give a file to the application.\\
-	\textbf{Level of trust : } (5) User\\
-	\newline
-	\textbf{ID : } 5\\ 
-	\textbf{Name : } Keys\\
-	\textbf{Description : } The keys are used for the encryption. A code injection can come through that + buffer overflow.\\
-	\textbf{Level of trust : } (1) Application\\
-	\end{minipage}
+\begin{minipage}{0.9\textwidth}
+\textbf{ID : } 1\\
+\textbf{Name : Ethernet port}\\
+\textbf{Description : }If the computers are connected by ethernet, the ethernet is an entry point and must be secured. The ethernet port used for the communication may be an entry point.\\
+\newline
+\textbf{ID : } 2\\
+\textbf{Name : Wifi port}\\
+\textbf{Description : }If the connection is wireless, the wifi port is an entry point.\\
+\newline
+\textbf{ID : } 3\\
+\textbf{Name : Bluetooth port}\\
+\textbf{Description : }The connection can be made using bluetooth.\\
+\newline
+\textbf{ID : } 4\\
+\textbf{Name : The file}\\
+\textbf{Description : }The file that should be sent is an entry point in the application. It is sent to the application using the GUI.\\
+\newline
+\textbf{ID : } 5\\
+\textbf{Name : Receiver's  IP}\\
+\textbf{Description : }The receiver's IP must be entered manually to the application, using the GUI.\\
+\end{minipage}
 }
 \subsection{Assets}
-
 \fbox{
-	\begin{minipage}{0.9\textwidth}
-	\textbf{ID : } 1\\ 
-	\textbf{Name : } IP Address\\
-	\textbf{Description : } The IP adress is used as identifier for the users in the program. It will be encrypted during the process.\\
-	\textbf{Level of trust : } (1) Application, (5) User\\
-	\newline
-	\textbf{ID : } 2\\ 
-	\textbf{Name : } Session key\\
-	\textbf{Description : } The session key is used to encrypt the file that Alice wants to send to Bob.\\
-	\textbf{Level of trust : } (1) Application, (5) User\\
-	\newline
-	\textbf{ID : } 3\\ 
-	\textbf{Name : } Private key\\
-	\textbf{Description : } Used to create the signature.\\
-	\textbf{Level of trust : } (1) Application, (5) User\\
-	\newline
-	\textbf{ID : } 4\\ 
-	\textbf{Name : } Signature\\
-	\textbf{Description : } The signature is used to confirm the personnality of the sender.\\
-	\textbf{Level of trust : } (1) Application, (5) User\\
-	\newline
-	\textbf{ID : } 5\\ 
-	\textbf{Name : } File\\
-	\textbf{Description : } The file sent by the user.\\
-	\textbf{Level of trust : } (1) Application, (5) User\\
-	\end{minipage}
+\begin{minipage}{0.9\textwidth}
+\textbf{ID : } 1\\
+\textbf{Name : }Users' IP\\
+\textbf{Description : }The IP adress is used as identifier for the users in the program. It will be encrypted during the process.		\\
+\newline
+\textbf{ID : } 2\\
+\textbf{Name : }File\\
+\textbf{Description : } The transferred file is an asset.\\
+\newline
+\textbf{ID : } 3\\
+\textbf{Name : }Sender's Session key\\
+\textbf{Description : }The session key is used to encrypt the file that Alice wants to send to Bob.\\
+\newline
+\textbf{ID : } 4\\
+\textbf{Name : }Sender's private key\\
+\textbf{Description : }Used to create the signature.\\
+\newline
+\textbf{ID : } 5\\
+\textbf{Name : }Signature\\
+\textbf{Description : }The signature is used to confirm the personnality of the sender.\\
+\end{minipage}
 }
-
+\newpage
 \section{Model analysis}
-
-\subsection{Data flow diagram}
-\includepdf[pages=1-1]{threat.pdf}
-
+\subsection{Date flow diagram}
+\begin{figure}[htbp]
+	\begin{center}
+		\includegraphics[scale=0.6]{threat.pdf}
+		\caption{Flow Diagram}
+		\label{Flow Diagram}
+	\end{center}
+\end{figure}
 \subsection{Potential threats}
+\fbox{
+\begin{minipage}{0.9\textwidth}
+\textbf{ID : } 1\\
+\textbf{Name : }Code injection with corrupted file\\
+\textbf{Description : }The user gives a corrupted file to the application. The file contains threatening code.\\
+\textbf{Stride Classification : }T (Tampering)\\
+\textbf{Investigation notes : }This attack should not affect the system because the code is not read and the file is considered as a set of bytes. The code is never read and so never executed.\\
+\textbf{Entry point : }GUI\\
+\textbf{Assets : }Signature, IPs, Session key, OS\\
+\newline
+\textbf{ID : } 2\\
+\textbf{Name : }Usurping IP of receiver\\
+\textbf{Description : }The ip of the receiver is imitated in order to receive the messages and thus the file.\\
+\textbf{Stride Classification : }S (Spoofing)\\
+\textbf{Investigation notes : }-\\
+\textbf{Entry point : }Ethernet port\\
+\textbf{Assets : }File, sender's signature\\
+\newline
+\textbf{ID : } 3\\
+\textbf{Name : }DoS attack\\
+\textbf{Description : }The attack saturates the connection.\\
+\textbf{Stride Classification : }D (Denial of Service)\\
+\textbf{Investigation notes : }The senders and receiver can still change the port or the communication if possible (switching from ethernet to Wifi if close to each others).\\
+\textbf{Entry point : }Transmission port (ethernet, wifi, bluetooth)\\
+\textbf{Assets : }-\\
+\newline
+\textbf{ID : } 4\\
+\textbf{Name : }Code injection with corrupted file during transfert\\
+\textbf{Description : }The file is replaced with a corrupted file during the transfert. The file contains threatening code.\\
+\textbf{Stride Classification : }T (Tampering)\\
+\textbf{Investigation notes : }This attack should not affect the system because the code is not read and the file is considered as a set of bytes. The code is never read and so never executed. Plus, the threatening code must be encrypted as the previous file otherwise it will not affect anything after decryption.\\
+\textbf{Entry point : }GUI\\
+\textbf{Assets : }Signature, IPs, Session key, OS\\
+\end{minipage}
+}
 
 \section{Conclusion}
 The goal of the project was to send a file over the network in a secure way, using AES and RSA encryption and SHA3 hash, following a given protocol. First the sender distribute an AES key that is send encrypted by RSA and then the file is encrypted using AES. The design of the exchange prevent anyone but the receiver to decrypt the file if someone is able to intercept the messages.\\
