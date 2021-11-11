@@ -1,6 +1,6 @@
 # Computer Security - Synchronized File Exchanger
 
-# Introduction
+## Introduction
 
 The prupose of the project is to implement a secure synchronized file
 exchanger between two computers with the possibility to send or receive
@@ -9,7 +9,7 @@ and RSA algorithm to encrypt and decrypt data in order to securely send
 informations. We also use SHA3 hash generate signature and thus verify
 the identity of the correspondant.
 
-# Implementation
+## Implementation
 
 The project is coded in Java.  
 The generation of the key was not to be handle by the project but using
@@ -33,7 +33,7 @@ the public key and compare the hashes.
   
 The GUI was done using SWING.
 
-# Code description
+## Code description
 
 There is two possible action send or receive a file. The receiver is the
 server and the sender is the client, once the socket are opened the
