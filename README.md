@@ -1,6 +1,6 @@
 # Computer Security - Synchronized File Exchanger
 
-## Quickstard
+## Quickstart
 
 ```
 git clone git@github.com:simonpicard/synchronized-file-exchanger.git
@@ -56,3 +56,9 @@ next message which is the file wrapped by the IPs and the nonce is
 encrypted in AES using the session key. Then Alice send her signature
 and Bob verify that it is correct usign Alice’s public key. Finally Bob
 sent a hash to Alice as an acknowledge.
+
+## Takeaways
+
+The goal of the project was to send a file over the network in a secure way, using AES and RSA encryption and SHA3 hash, following a given protocol. First the sender distribute an AES key that is send encrypted by RSA and then the file is encrypted using AES. The design of the exchange prevent anyone but the receiver to decrypt the file if someone is able to intercept the messages.\\
+Symmetric encryption and fecryption is often mor efficent and fits better for larger volume of date than assymetrics ciphers but a shared key is mandotory, so first a random session key is sent on the network encrypted using assymetric encryptoin, RSA, and then, for the large message, the file, it is encrypted using symmetric encryption, AES.
+
