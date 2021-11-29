@@ -67,14 +67,14 @@ public class MainFrame extends JFrame {
         
         jbtnSend.setBackground(new Color(236, 247, 255));
         jbtnSend.setBounds(new Rectangle(14, 14, 85, 25));
-        jbtnSend.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 13));
+        jbtnSend.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 13));
         jbtnSend.setBorder(BorderFactory.createRaisedBevelBorder());
         jbtnSend.setText("Send");
         jbtnSend.addActionListener(new MainFrame_jbtnSend_actionAdapter(this));
         
         
         jlblIP.setText("My IP ");
-        jlblIP.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 13));
+        jlblIP.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 13));
         jlblIP.setBounds(new Rectangle(197, 18, 180, 16));
         byte [] ip=InetAddress.getLocalHost().getAddress();
         jlblIP.setText("My IP "+(ip[0]&0xff)+"."+(ip[1]&0xff)+"."+(ip[2]&0xff)+"."+(ip[3]&0xff));
@@ -83,7 +83,7 @@ public class MainFrame extends JFrame {
         
         jbtnSetting.setBackground(new Color(236, 247, 255));
         jbtnSetting.setBounds(new Rectangle(106, 14, 73, 25));
-        jbtnSetting.setFont(new java.awt.Font("ËÎÌו", Font.PLAIN, 13));
+        jbtnSetting.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 13));
         jbtnSetting.setBorder(BorderFactory.createRaisedBevelBorder());
         jbtnSetting.setText("Receive");
         jbtnSetting.addActionListener(new MainFrame_jbtnSetting_actionAdapter(this));

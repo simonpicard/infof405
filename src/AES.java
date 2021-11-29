@@ -17,7 +17,7 @@ public class AES {
 		byte[] cipherData = null;
 		try {
 			byte[] IV = Util.getIV();
-			Cipher cipher = Cipher.getInstance("AES/CTR/PKCS5Padding");
+			Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
 			cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV));
 			cipherData = cipher.doFinal(data);
 		} catch (IllegalBlockSizeException e) {
@@ -47,7 +47,7 @@ public class AES {
 		byte[] cipherData = null;
 	    try {
 			byte[] IV = Util.getIV();
-			Cipher cipher = Cipher.getInstance("AES/CTR/PKCS5Padding");
+			Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
 		    cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IV));
 			cipherData = cipher.doFinal(data);
 		} catch (IllegalBlockSizeException e) {

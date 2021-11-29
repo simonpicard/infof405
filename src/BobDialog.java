@@ -75,7 +75,7 @@ public class BobDialog extends JDialog {
         
         
         //
-        jlblPort.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jlblPort.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jlblPort.setText("Port");
         jlblPort.setBounds(new Rectangle(32, 67, 67, 31));
         
@@ -85,7 +85,7 @@ public class BobDialog extends JDialog {
         jtfPort.setBounds(new Rectangle(129, 72, 62, 21));
         
         //
-        jlblFile.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jlblFile.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jlblFile.setText("File to save");
         jlblFile.setBounds(new Rectangle(32, 120, 100, 16));
         
@@ -96,13 +96,13 @@ public class BobDialog extends JDialog {
 
         jbtnFile.setBackground(new Color(236, 247, 255));
         jbtnFile.setBounds(new Rectangle(297, 116, 71, 25));
-        jbtnFile.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jbtnFile.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jbtnFile.setBorder(BorderFactory.createRaisedBevelBorder());
         jbtnFile.setText("broswer");
         jbtnFile.addActionListener(new SettingDialog_jbtnFile_actionAdapter(this));
 
         //
-        jlblFilePub.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jlblFilePub.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jlblFilePub.setText("Public certificate");
         jlblFilePub.setBounds(new Rectangle(32, 165, 100, 16));
         
@@ -113,13 +113,13 @@ public class BobDialog extends JDialog {
 
         jbtnFilePub.setBackground(new Color(236, 247, 255));
         jbtnFilePub.setBounds(new Rectangle(297, 163, 71, 25));
-        jbtnFilePub.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jbtnFilePub.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jbtnFilePub.setBorder(BorderFactory.createRaisedBevelBorder());
         jbtnFilePub.setText("broswer");
         jbtnFilePub.addActionListener(new SettingDialog_jbtnFilePub_actionAdapter(this));
 
         //
-        jlblFilePrive.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jlblFilePrive.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jlblFilePrive.setText("Private key");
         jlblFilePrive.setBounds(new Rectangle(32, 210, 100, 16));
         
@@ -130,7 +130,7 @@ public class BobDialog extends JDialog {
 
         jbtnFilePrive.setBackground(new Color(236, 247, 255));
         jbtnFilePrive.setBounds(new Rectangle(297, 208, 71, 25));
-        jbtnFilePrive.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jbtnFilePrive.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jbtnFilePrive.setBorder(BorderFactory.createRaisedBevelBorder());
         jbtnFilePrive.setText("broswer");
         jbtnFilePrive.addActionListener(new SettingDialog_jbtnFilePrive_actionAdapter(this));
@@ -141,14 +141,14 @@ public class BobDialog extends JDialog {
         
         jbtnCancel.setBackground(new Color(236, 247, 255));
         jbtnCancel.setBounds(new Rectangle(294, 250, 71, 25));
-        jbtnCancel.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jbtnCancel.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jbtnCancel.setBorder(BorderFactory.createRaisedBevelBorder());
         jbtnCancel.setText("Cancel");
         jbtnCancel.addActionListener(new
         		SettingDialog_jbtnCancel_actionAdapter(this));
         jbtnOK.setBackground(new Color(236, 247, 255));
         jbtnOK.setBounds(new Rectangle(195, 250, 71, 25));
-        jbtnOK.setFont(new java.awt.Font("宋体", Font.PLAIN, 12));
+        jbtnOK.setFont(new java.awt.Font(Font.SANS_SERIF, Font.PLAIN, 12));
         jbtnOK.setBorder(BorderFactory.createRaisedBevelBorder());
         jbtnOK.setText("OK");
         jbtnOK.addActionListener(new SettingDialog_jbtnOK_actionAdapter(this));
@@ -236,7 +236,7 @@ public class BobDialog extends JDialog {
     
   public void jbtnOK_actionPerformed(ActionEvent e) {
       if(jtfPort.getText().trim().equals("")||jtfFile.getText().trim().equals("")||jtfFilePub.getText().trim().equals("")||jtfFilePrive.getText().trim().equals("")){
-          JOptionPane.showMessageDialog(this,"Error！");
+          JOptionPane.showMessageDialog(this,"Error");
           return;
       }
   	this.bobPub = jtfFilePub.getText();
