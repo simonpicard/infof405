@@ -1,5 +1,14 @@
 # Computer Security - Synchronized File Exchanger
 
+## Quickstard
+
+```
+git clone git@github.com:simonpicard/synchronized-file-exchanger.git
+cd synchronized-file-exchanger/src
+make
+java Main
+```
+
 ## Introduction
 
 The prupose of the project is to implement a secure synchronized file
